@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  ids-basecamp-daps:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-11-14T15:49:55.023373119Z"
+    description: A Helm chart for Kubernetes
+    digest: 116de2e697e839a795dff160711ac0ba3b3b51258a757485c59f8ecc6fd9402b
+    name: ids-basecamp-daps
+    type: application
+    urls:
+    - https://github.com/truzzt/helm-charts/releases/download/ids-basecamp-daps-1.0.2/ids-basecamp-daps-1.0.2.tgz
+    version: 1.0.2
+generated: "2023-11-14T15:49:55.023378499Z"
