@@ -1,0 +1,4 @@
+ingress:
+  clusterIssuer: letsencrypt-staging
+  hostName: daps.basecamp.prod.truzzt.eu
+  class: nginx
