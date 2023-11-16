@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: daps
-          image: ghcr.io/truzzt/ids-basecamp-daps:1.0.0-alpha.6
+          image: ghcr.io/truzzt/ids-basecamp-daps:1.0.0-alpha.7
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
