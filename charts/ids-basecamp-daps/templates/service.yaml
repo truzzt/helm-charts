@@ -18,6 +18,6 @@ spec:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   ports:
     - name: http
-    	protocol: TCP
-    	port: 4567
-    	targetPort: http
+      protocol: TCP
+      port: 4567
+      targetPort: http

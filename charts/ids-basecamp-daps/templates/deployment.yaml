@@ -35,8 +35,8 @@ spec:
                 name: {{ .Release.Name }}
           ports:
             - containerPort: 4567
-            	name: http
-            	protocol: TCP
+              name: http
+              protocol: TCP
           resources:
             requests:
               cpu: "0.5"
