@@ -37,6 +37,10 @@ spec:
             - containerPort: 4567
               name: http
               protocol: TCP
+            - secret:
+              mountPath: /opt/keys/omejdn.key
+              subPath: omejdn.key
+              name: omejdn-key
           resources:
             requests:
               cpu: "0.5"
@@ -44,3 +48,7 @@ spec:
             limits:
               cpu: "2"
               memory: "4G"
+      volumes:
+        - name: omejdn-key
+          secret:
+            secretName: {{ .Release.Name }}

@@ -2,3 +2,7 @@ ingress:
   clusterIssuer: letsencrypt-staging
   hostName: daps.basecamp.prod.truzzt.eu
   class: nginx
+omejdn:
+  issuer: https://daps.prod.truzzt.eu
+  key:
+    contentB64: "base64 encoded key"
