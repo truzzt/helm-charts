@@ -37,6 +37,7 @@ spec:
             - containerPort: 4567
               name: http
               protocol: TCP
+          volumeMounts:
             - secret:
               mountPath: /opt/keys/omejdn.key
               subPath: omejdn.key
