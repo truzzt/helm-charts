@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc
+  labels:
+    {{- include "ids-basecamp-clearinghouse.ch-edc.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "ids-basecamp-clearinghouse.ch-edc.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ids-basecamp-clearinghouse.ch-edc.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-edc
+          image: "ghcr.io/truzzt/ids-basecamp-clearing/ch-edc:{{ .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc
+          ports:
+            - containerPort: 11002
+              name: management
+              protocol: TCP
+            - containerPort: 11003
+              name: protocol
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/check/health
+              port: http
+          resources:
+            requests:
+              cpu: "0.5"
+              memory: "0.5G"
+            limits:
+              cpu: "2"
+              memory: "4G"
+          volumeMounts:
+            - name: fs-vault
+              mountPath: /resources/vault/edc/keystore.jks
+              subPath: keystore.jks
+            - name: fs-vault
+              mountPath: /resources/vault/edc/vault.properties
+              subPath: vault.properties
+      volumes:
+        - name: fs-vault
+          secret:
+            secretName: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-app
+  labels:
+    {{- include "ids-basecamp-clearinghouse.ch-app.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "ids-basecamp-clearinghouse.ch-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ids-basecamp-clearinghouse.ch-app.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-app
+          image: "ghcr.io/truzzt/ids-basecamp-clearing/ch-app:{{ .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              name: http
+              protocol: TCP
+          env:
+            - name: SHARED_SECRET
+              value: {{ .Values.jwt.sharedSecret | quote }}
+            - name: SERVICE_ID_LOG
+              value: {{ .Values.jwt.audiance | quote }}
+          livenessProbe:
+            httpGet:
+              path: /.well-known/jwks.json
+              port: http
+          resources:
+            requests:
+              cpu: "0.5"
+              memory: "0.5G"
+            limits:
+              cpu: "2"
+              memory: "4G"
+          volumeMounts:
+            - name: config
+              mountPath: /usr/src/chapp/config.toml
+              subPath: config.toml
+              readOnly: true
+            - name: keys
+              mountPath: /usr/src/chapp/keys/private_key.der
+              subPath: private_key.der
+              readOnly: true
+      volumes:
+        - name: keys
+          secret:
+            secretName: {{ include "ids-basecamp-clearinghouse.fullname" . }}-app
+        - name: config
+          configMap:
+            name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc-ms-8
