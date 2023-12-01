@@ -8,7 +8,7 @@ mds:
 
 ingress:
   clusterIssuer: letsencrypt-staging
-  truzztboxId: test
+  hostName: clearing.basecamp.prod.truzzt.eu
   class: nginx
 
 edc:
