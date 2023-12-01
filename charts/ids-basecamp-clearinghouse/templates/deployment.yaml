@@ -91,11 +91,11 @@ spec:
               memory: "4G"
           volumeMounts:
             - name: config
-              mountPath: /usr/src/chapp/config.toml
+              mountPath: /app/config.toml
               subPath: config.toml
               readOnly: true
             - name: keys
-              mountPath: /usr/src/chapp/keys/private_key.der
+              mountPath: /app/keys/private_key.der
               subPath: private_key.der
               readOnly: true
       volumes:
