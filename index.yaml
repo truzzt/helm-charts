@@ -1,5 +1,16 @@
 apiVersion: v1
 entries:
+  ids-basecamp-clearinghouse:
+  - apiVersion: v2
+    appVersion: 0.10.0
+    created: "2023-12-01T14:06:24.285392494Z"
+    description: Helm-chart the IDS Basecamp Clearinghouse
+    digest: d60ba79a6680270151799c7998ac63458d8a74f3007c3a81d42efd3e8de83985
+    name: ids-basecamp-clearinghouse
+    type: application
+    urls:
+    - https://github.com/truzzt/helm-charts/releases/download/ids-basecamp-clearinghouse-0.1.0/ids-basecamp-clearinghouse-0.1.0.tgz
+    version: 0.1.0
   ids-basecamp-daps:
   - apiVersion: v2
     appVersion: 1.0.0-alpha.7
@@ -61,4 +72,4 @@ entries:
     urls:
     - https://github.com/truzzt/helm-charts/releases/download/ids-basecamp-daps-1.0.2/ids-basecamp-daps-1.0.2.tgz
     version: 1.0.2
-generated: "2023-11-17T09:01:04.644065249Z"
+generated: "2023-12-01T14:06:24.285409696Z"
