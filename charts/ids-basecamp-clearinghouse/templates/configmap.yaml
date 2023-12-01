@@ -14,53 +14,11 @@ data:
     signing_key = "keys/private_key.der" # Optional
     performance_tracing = false
 ---
-# Based on MDS EDC 4.2.1
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-mds-edc-4-2-1
-  labels:
-    {{- include "ids-basecamp-clearinghouse.ch-edc.labels" . | nindent 4 }}
-data:
-  # Connector Host Name
-  MY_EDC_FQDN: {{ printf "clearinghouse.%s.prod.truzztbox.org" .Values.ingress.truzztboxId }}
-  # Connector Technical Name
-  MY_EDC_NAME_KEBAB_CASE: {{ .Values.edc.name }}
-  # Connector Localized Name / Title
-  MY_EDC_TITLE: {{ .Values.edc.title }}
-  # Connector Description Text
-  MY_EDC_DESCRIPTION: {{ .Values.edc.description }}
-  # Connector Curator
-  # The company using the EDC Connector, configuring data offers, etc.
-  MY_EDC_CURATOR_URL: {{ .Values.edc.curator.url }}
-  MY_EDC_CURATOR_NAME: {{ .Values.edc.curator.name }}
-  # Database Connection
-  MY_EDC_JDBC_URL: {{ printf "jdbc:postgresql://%s:%d/%s" .Values.edc.db.host .Values.edc.db.port .Values.edc.db.name }}
-  MY_EDC_JDBC_USER: {{ .Values.edc.db.user }}
-  MY_EDC_JDBC_PASSWORD: {{ .Values.edc.db.password }}
-  # Management API Key
-  EDC_API_AUTH_KEY: {{ .Values.edc.api.authKey }}
-  # Connector Maintainer
-  # The company hosting the EDC Connector
-  MY_EDC_MAINTAINER_URL: "https://truzzt.com"
-  MY_EDC_MAINTAINER_NAME: "truzzt GmbH"
-  # (MDS Only) Clearing House
-  EDC_CLEARINGHOUSE_LOG_URL: {{ .Values.mds.clearinghouseLogUrl }}
-  # DAPS URL
-  EDC_OAUTH_TOKEN_URL: {{ .Values.mds.oauthTokenUrl }}
-  EDC_OAUTH_PROVIDER_JWKS_URL: {{ .Values.mds.oauthProviderUrl }}
-  # DAPS Credentials
-  EDC_OAUTH_CLIENT_ID: {{ .Values.edc.oauth.clientId }}
-  EDC_KEYSTORE: /resources/vault/edc/keystore.jks
-  EDC_KEYSTORE_PASSWORD: 'password'
-  EDC_OAUTH_CERTIFICATE_ALIAS: "1"
-  EDC_OAUTH_PRIVATE_KEY_ALIAS: "1"
----
 # Based on EDC milestone-8
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc-ms-8
+  name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc
   labels:
     {{- include "ids-basecamp-clearinghouse.ch-edc.labels" . | nindent 4 }}
 data:
@@ -76,10 +34,6 @@ data:
   # The company using the EDC Connector, configuring data offers, etc.
   MY_EDC_CURATOR_URL: {{ .Values.edc.curator.url }}
   MY_EDC_CURATOR_NAME: {{ .Values.edc.curator.name }}
-  # Database Connection
-  MY_EDC_JDBC_URL: {{ printf "jdbc:postgresql://%s:%d/%s" .Values.edc.db.host .Values.edc.db.port .Values.edc.db.name }}
-  MY_EDC_JDBC_USER: {{ .Values.edc.db.user }}
-  MY_EDC_JDBC_PASSWORD: {{ .Values.edc.db.password }}
   # Management API Key
   EDC_API_AUTH_KEY: {{ .Values.edc.api.authKey }}
   # Connector Maintainer
@@ -100,102 +54,3 @@ data:
   TRUZZT_CLEARINGHOUSE_JWT_SIGN_SECRET: {{ .Values.jwt.sharedSecret | quote }}
   TRUZZT_CLEARINGHOUSE_JWT_EXPIRES_AT: "30"
   TRUZZT_CLEARINGHOUSE_APP_BASE_URL: {{ include "ids-basecamp-clearinghouse.fullname" . }}-app:8080
----
-# MDS EDC 6.0.0
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc-6-0-0
-  labels:
-    {{- include "ids-basecamp-clearinghouse.ch-edc.labels" . | nindent 4 }}
-data:
-  # Required: Database Connection
-  MY_EDC_JDBC_URL: {{ printf "jdbc:postgresql://%s:%d/%s" .Values.edc.db.host .Values.edc.db.port .Values.edc.db.name }}
-  MY_EDC_JDBC_USER: {{ .Values.edc.db.user }}
-  MY_EDC_JDBC_PASSWORD: {{ .Values.edc.db.password }}
-  # Required: Connector Metadata
-  MY_EDC_NAME_KEBAB_CASE: {{ .Values.edc.name }}
-  MY_EDC_TITLE: {{ .Values.edc.title }}
-  MY_EDC_DESCRIPTION: {{ .Values.edc.description }}
-  MY_EDC_CURATOR_URL: {{ .Values.edc.curator.url }}
-  MY_EDC_CURATOR_NAME: {{ .Values.edc.curator.name }}
-  MY_EDC_MAINTAINER_URL: "https://truzzt.com"
-  MY_EDC_MAINTAINER_NAME: "truzzt GmbH"
-  # Required: Domain Name
-  MY_EDC_FQDN: {{ printf "clearinghouse.%s.prod.truzztbox.org" .Values.ingress.truzztboxId }}
-  # Optional: Add an additional path prefix
-  MY_EDC_BASE_PATH: ""
-  # Optional: For docker-compose
-  MY_EDC_PROTOCOL: https://
-  # EDC CONFIG
-  EDC_JSONLD_HTTPS_ENABLED: "true"
-  EDC_CONNECTOR_NAME: {{ .Values.edc.name }}
-  EDC_PARTICIPANT_ID: {{ .Values.edc.name }}
-  # Ports and Paths
-  WEB_HTTP_PORT: "11001"
-  WEB_HTTP_MANAGEMENT_PORT: "11002"
-  WEB_HTTP_PROTOCOL_PORT: "11003"
-  WEB_HTTP_CONTROL_PORT: "11004"
-  WEB_HTTP_PATH: /api
-  WEB_HTTP_MANAGEMENT_PATH: /api/management
-  WEB_HTTP_PROTOCOL_PATH: /api/dsp
-  WEB_HTTP_CONTROL_PATH: /api/control
-  EDC_HOSTNAME: {{ printf "clearinghouse.%s.prod.truzztbox.org"  .Values.ingress.truzztboxId }}
-  EDC_DSP_CALLBACK_ADDRESS: {{ printf "https://clearinghouse.%s.prod.truzztbox.org/api/dsp" .Values.ingress.truzztboxId }}
-  # Flyway Extension: Defaults
-  EDC_DATASOURCE_DEFAULT_NAME: default
-  EDC_DATASOURCE_DEFAULT_URL: {{ printf "jdbc:postgresql://%s:%d/%s" .Values.edc.db.host .Values.edc.db.port .Values.edc.db.name }}
-  EDC_DATASOURCE_DEFAULT_USER: {{ .Values.edc.db.user }}
-  EDC_DATASOURCE_DEFAULT_PASSWORD: {{ .Values.edc.db.password }}
-  # Asset
-  EDC_DATASOURCE_ASSET_NAME: asset
-  EDC_DATASOURCE_ASSET_URL: {{ printf "jdbc:postgresql://%s:%d/%s" .Values.edc.db.host .Values.edc.db.port .Values.edc.db.name }}
-  EDC_DATASOURCE_ASSET_USER: {{ .Values.edc.db.user }}
-  EDC_DATASOURCE_ASSET_PASSWORD: {{ .Values.edc.db.password }}
-  # Contract definition
-  EDC_DATASOURCE_CONTRACTDEFINITION_NAME: contractdefinition
-  EDC_DATASOURCE_CONTRACTDEFINITION_URL: {{ printf "jdbc:postgresql://%s:%d/%s" .Values.edc.db.host .Values.edc.db.port .Values.edc.db.name }}
-  EDC_DATASOURCE_CONTRACTDEFINITION_USER: {{ .Values.edc.db.user }}
-  EDC_DATASOURCE_CONTRACTDEFINITION_PASSWORD: {{ .Values.edc.db.password }}
-  # Contract negotiation
-  EDC_DATASOURCE_CONTRACTNEGOTIATION_NAME: contractnegotiation
-  EDC_DATASOURCE_CONTRACTNEGOTIATION_URL: {{ printf "jdbc:postgresql://%s:%d/%s" .Values.edc.db.host .Values.edc.db.port .Values.edc.db.name }}
-  EDC_DATASOURCE_CONTRACTNEGOTIATION_USER: {{ .Values.edc.db.user }}
-  EDC_DATASOURCE_CONTRACTNEGOTIATION_PASSWORD: {{ .Values.edc.db.password }}
-  # Policy
-  EDC_DATASOURCE_POLICY_NAME: policy
-  EDC_DATASOURCE_POLICY_URL: {{ printf "jdbc:postgresql://%s:%d/%s" .Values.edc.db.host .Values.edc.db.port .Values.edc.db.name }}
-  EDC_DATASOURCE_POLICY_USER: {{ .Values.edc.db.user }}
-  EDC_DATASOURCE_POLICY_PASSWORD: {{ .Values.edc.db.password }}
-  # Transferprocess
-  EDC_DATASOURCE_TRANSFERPROCESS_NAME: transferprocess
-  EDC_DATASOURCE_TRANSFERPROCESS_URL: {{ printf "jdbc:postgresql://%s:%d/%s" .Values.edc.db.host .Values.edc.db.port .Values.edc.db.name }}
-  EDC_DATASOURCE_TRANSFERPROCESS_USER: {{ .Values.edc.db.user }}
-  EDC_DATASOURCE_TRANSFERPROCESS_PASSWORD: {{ .Values.edc.db.password }}
-  # Dataplaneinstance
-  EDC_DATASOURCE_DATAPLANEINSTANCE_NAME: dataplaneinstance
-  EDC_DATASOURCE_DATAPLANEINSTANCE_URL: {{ printf "jdbc:postgresql://%s:%d/%s" .Values.edc.db.host .Values.edc.db.port .Values.edc.db.name }}
-  EDC_DATASOURCE_DATAPLANEINSTANCE_USER: {{ .Values.edc.db.user }}
-  EDC_DATASOURCE_DATAPLANEINSTANCE_PASSWORD: {{ .Values.edc.db.password }}
-  # Oauth default configurations for compatibility with sovity DAPS
-  EDC_OAUTH_PROVIDER_AUDIENCE: {{ .Values.mds.oauthTokenUrl }}
-  EDC_OAUTH_ENDPOINT_AUDIENCE: idsc:IDS_CONNECTORS_ALL
-  EDC_AGENT_IDENTITY_KEY: sub
-  # This file could contain an entry replacing the EDC_KEYSTORE ENV var
-  # but for some reason it is required, and EDC won't start up if it isn't configured
-  # it is created in the Dockerfile
-  EDC_VAULT: /resources/vault/edc/vault.properties
-  # Management API Key
-  EDC_API_AUTH_KEY: {{ .Values.edc.api.authKey }}
-  # (MDS Only) Clearing House
-  EDC_CLEARINGHOUSE_LOG_URL: {{ .Values.mds.clearinghouseLogUrl }}
-  # DAPS URL
-  EDC_OAUTH_TOKEN_URL: {{ .Values.mds.oauthTokenUrl }}
-  EDC_OAUTH_PROVIDER_JWKS_URL: 'https://daps.test.mobility-dataspace.eu/jwks.json'
-  # DAPS Credentials
-  EDC_OAUTH_CLIENT_ID: {{ .Values.edc.oauth.clientId }}
-  EDC_KEYSTORE: /resources/vault/edc/keystore.jks
-  EDC_KEYSTORE_PASSWORD: 'password'
-  EDC_OAUTH_CERTIFICATE_ALIAS: "1"
-  EDC_OAUTH_PRIVATE_KEY_ALIAS: "1"
-

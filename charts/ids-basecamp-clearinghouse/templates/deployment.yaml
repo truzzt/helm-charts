@@ -104,4 +104,4 @@ spec:
             secretName: {{ include "ids-basecamp-clearinghouse.fullname" . }}-app
         - name: config
           configMap:
-            name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc-ms-8
+            name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-app
