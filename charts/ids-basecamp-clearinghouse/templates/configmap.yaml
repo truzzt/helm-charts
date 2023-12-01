@@ -60,7 +60,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc-ms-8
+  name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc
   labels:
     {{- include "ids-basecamp-clearinghouse.ch-edc.labels" . | nindent 4 }}
 data:
@@ -76,10 +76,6 @@ data:
   # The company using the EDC Connector, configuring data offers, etc.
   MY_EDC_CURATOR_URL: {{ .Values.edc.curator.url }}
   MY_EDC_CURATOR_NAME: {{ .Values.edc.curator.name }}
-  # Database Connection
-  MY_EDC_JDBC_URL: {{ printf "jdbc:postgresql://%s:%d/%s" .Values.edc.db.host .Values.edc.db.port .Values.edc.db.name }}
-  MY_EDC_JDBC_USER: {{ .Values.edc.db.user }}
-  MY_EDC_JDBC_PASSWORD: {{ .Values.edc.db.password }}
   # Management API Key
   EDC_API_AUTH_KEY: {{ .Values.edc.api.authKey }}
   # Connector Maintainer
