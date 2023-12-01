@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: {{ .Values.ingress.class }}
   rules:
-  - host: {{ printf "clearinghouse.%s.prod.truzztbox.org" .Values.ingress.truzztboxId }}
+  - host: {{ .Values.ingress.hostName }}
     http:
       paths:
       - path: /
@@ -36,5 +36,5 @@ spec:
               name: management
   tls:
     - hosts:
-      - {{ printf "clearinghouse.%s.prod.truzztbox.org" .Values.ingress.truzztboxId }}
-      secretName: {{ printf "clearinghouse.%s.prod.truzztbox.org" .Values.ingress.truzztboxId | replace "." "-" }}
+      - {{ .Values.ingress.hostName }}
+      secretName: {{ .Values.ingress.hostName | replace "." "-" }}
