@@ -1,0 +1,47 @@
+# Default values for ids-basecamp-clearinghouse.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+mds:
+  clearinghouseLogUrl: "https://clearing.mobility-dataspace.eu/messages/log"
+  oauthTokenUrl: "https://daps.mobility-dataspace.eu/token"
+  oauthProviderUrl: "https://daps.mobility-dataspace.eu/jwks.json"
+
+ingress:
+  clusterIssuer: letsencrypt-staging
+  truzztboxId: test
+  class: nginx
+
+edc:
+  name: edc
+  title: "EDC"
+  description: "EDC"
+  curator:
+    name: "Example GmbH"
+    url: "https://example.com"
+  db:
+    host: "host"
+    port: "5432"
+    name: "db_name"
+    user: "user"
+    password: "password"
+  api:
+    authKey: ApiKeyDefaultValue
+  oauth:
+    clientId: "SKI_AKI"
+  keystore:
+    contentB64: "YmFzZTY0IGVuY29kZWQgdmF1bHQK"
+  vault:
+    contentB64: "YmFzZTY0IGVuY29kZWQgdmF1bHQK"
+
+app:
+  logLevel: INFO
+  documentDatabaseUrl: "mongodb://localhost:27017"
+  processDatabaseUrl: "mongodb://localhost:27017"
+  keyringDatabaseUrl: "mongodb://localhost:27017"
+  privateKeyB64: "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"
+
+jwt:
+  issuer: "1"
+  audiance: "1"
+  sharedSecret: "123"

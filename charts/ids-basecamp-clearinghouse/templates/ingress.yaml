@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+metadata:
+  name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc
+  labels:
+    {{- include "ids-basecamp-clearinghouse.ch-edc.labels" . | nindent 4 }}
+  annotations:
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer }}
+spec:
+  ingressClassName: {{ .Values.ingress.class }}
+  rules:
+  - host: {{ printf "clearinghouse.%s.prod.truzztbox.org" .Values.ingress.truzztboxId }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}-edc
+            port:
+              name: http
+      - path: /api/v1/ids
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}-edc
+            port:
+              name: protocol
+      - path: /api/v1/management
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Release.Name }}-edc
+            port:
+              name: management
+  tls:
+    - hosts:
+      - {{ printf "clearinghouse.%s.prod.truzztbox.org" .Values.ingress.truzztboxId }}
+      secretName: {{ printf "clearinghouse.%s.prod.truzztbox.org" .Values.ingress.truzztboxId | replace "." "-" }}

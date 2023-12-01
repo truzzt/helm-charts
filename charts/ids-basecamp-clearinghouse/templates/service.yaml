@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-edc
+  labels:
+    {{- include "ids-basecamp-clearinghouse.ch-edc.labels" . | nindent 4 }}
+spec:
+  ports:
+    - name: management
+      protocol: TCP
+      port: 8002
+      targetPort: management
+    - name: protocol
+      protocol: TCP
+      port: 8003
+      targetPort: protocol
+  selector:
+    {{- include "ids-basecamp-clearinghouse.ch-edc.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ids-basecamp-clearinghouse.fullname" . }}-app
+  labels:
+    {{- include "ids-basecamp-clearinghouse.ch-app.labels" . | nindent 4 }}
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8000
+      targetPort: http
+  selector:
+    {{- include "ids-basecamp-clearinghouse.ch-app.selectorLabels" . | nindent 4 }}
