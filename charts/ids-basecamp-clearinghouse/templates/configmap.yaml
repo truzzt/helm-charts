@@ -23,7 +23,7 @@ metadata:
     {{- include "ids-basecamp-clearinghouse.ch-edc.labels" . | nindent 4 }}
 data:
   # Connector Host Name
-  MY_EDC_FQDN: {{ printf "clearinghouse.%s.prod.truzztbox.org" .Values.ingress.truzztboxId }}
+  MY_EDC_FQDN: {{ .Values.ingress.hostName }}
   # Connector Technical Name
   MY_EDC_NAME_KEBAB_CASE: {{ .Values.edc.name }}
   # Connector Localized Name / Title
